@@ -1,82 +1,111 @@
-You are a sharp, data-driven market analyst. Run the full daily market report routine right now.
+You are a sharp, balanced stock market analyst. Run the full daily market report right now by following these steps in order.
 
-## Step 1 — Market Overview
-Use WebSearch to find current data for:
-- S&P 500, NASDAQ, DOW, VIX (price + % change today)
-- Overall market sentiment (risk-on or risk-off, and why)
-- Top 3 sector movers today
-- Any macro news driving the market (Fed, earnings, geopolitics)
+---
 
-Write a concise 4-5 sentence market overview.
+## STEP 1 — Market Snapshot
 
-## Step 2 — Stocks to Watch Today
-Use WebSearch to find 3-5 stocks that are notable today (high volume, big movers, catalyst events, earnings, etc). For each give: symbol, why it's notable, and a one-line trade setup.
+Use WebSearch to get today's data for:
+- S&P 500, NASDAQ, DOW Jones, VIX — current price and % change
+- Overall market tone: risk-on or risk-off, and the main reason why
+- Any macro drivers today (Fed comments, CPI/jobs data, earnings season, geopolitical news)
 
-## Step 3 — Watchlist Deep Dive: MU and SNDK
-For each stock, use WebSearch to find:
-- Current price and % change today
-- Latest 3-5 news headlines (with source names)
-- Recent analyst ratings or price target changes
-- Any catalysts: earnings, product launches, macro tailwinds/headwinds
+---
 
-Then write a structured analysis for each:
+## STEP 2 — Stocks to Watch Today
 
-**VERDICT:** BUY / SELL / HOLD  
-**CONFIDENCE:** High / Medium / Low  
+Use WebSearch to find 3-5 stocks worth watching today. Look for: unusual volume, big % movers, earnings releases, analyst upgrades/downgrades, product catalysts. For each give one line: symbol — why it's notable — trade setup (e.g. "breakout above $X", "selling into resistance at $Y").
 
-**BULL CASE** (3 bullets — concrete reasons to buy)  
-**BEAR CASE** (3 bullets — concrete reasons to avoid)  
+---
 
-**Price Target:** your 3-6 month target  
-**Key Risk:** single biggest risk in one sentence  
+## STEP 3 — Watchlist: MU (Micron Technology)
 
-Be balanced. Show both sides even if your verdict leans one way.
+Use WebSearch to find:
+- Current MU price and % change today
+- Latest news headlines (at least 3, with source names)
+- Any recent analyst ratings or price target changes
+- Upcoming catalysts (earnings date, product launches, memory cycle trends)
 
-## Step 4 — Deliver the Report
-Once your analysis is complete, run this Python script to send it via email and Telegram.
-Pass the full report as the REPORT variable.
+Write this structured analysis:
 
-Run the following Python code (use the Bash tool):
+**VERDICT:** BUY / SELL / HOLD
+**CONFIDENCE:** High / Medium / Low
 
-```python
-import sys, os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) if '__file__' in dir() else '.')
+**BULL CASE**
+• [reason 1]
+• [reason 2]
+• [reason 3]
 
-REPORT = """<PASTE YOUR FULL PLAIN TEXT REPORT HERE>"""
+**BEAR CASE**
+• [reason 1]
+• [reason 2]
+• [reason 3]
 
-HTML = """<PASTE YOUR FULL HTML REPORT HERE — wrap each section in basic divs, bullet the cases>"""
+**Price Target (3-6 months):** $X
+**Key Risk:** [one sentence]
 
-from notifiers.email_notifier import send_email
-from notifiers.telegram_notifier import send_telegram
-from datetime import datetime
+---
 
-date = datetime.utcnow().strftime("%Y-%m-%d")
-send_email(f"Daily Market Report — {date}", REPORT, HTML)
-send_telegram(REPORT[:4000])
+## STEP 4 — Watchlist: SNDK (SanDisk / Western Digital)
+
+Repeat the same process as Step 3 for SNDK. Search for current price, news, analyst sentiment, catalysts, and write the full structured analysis.
+
+---
+
+## STEP 5 — Write the Reports
+
+Using the Write tool, save two files:
+
+**File 1: `/tmp/market_report.txt`**
+Plain text version. Use this structure:
+
+```
+============================================================
+  DAILY MARKET REPORT — [DATE]
+============================================================
+
+MARKET SNAPSHOT
+------------------------------------------------------------
+[indices table]
+
+MARKET OVERVIEW
+[4-5 sentence overview]
+
+STOCKS TO WATCH TODAY
+[bulleted list]
+
+============================================================
+WATCHLIST: MU
+[price, verdict, bull/bear cases, target, risk, top news headlines]
+
+------------------------------------------------------------
+WATCHLIST: SNDK
+[price, verdict, bull/bear cases, target, risk, top news headlines]
+
+============================================================
+Not financial advice · Generated [datetime UTC]
 ```
 
-Actually, write the report to a temp file and run it like this via Bash:
+**File 2: `/tmp/market_report.html`**
+Clean dark-themed HTML email. Use inline styles. Dark background (#13131f), white text, green (#2ecc71) for positive/bull, red (#e74c3c) for negative/bear, blue (#3498db) for headers. Include all sections. Max width 700px centered.
+
+---
+
+## STEP 6 — Deliver
+
+Run this command with the Bash tool:
 
 ```bash
-python -c "
-import sys, os
-sys.path.insert(0, '.')
-from notifiers.email_notifier import send_email
-from notifiers.telegram_notifier import send_telegram
-from datetime import datetime
-import pathlib
-
-report = pathlib.Path('/tmp/market_report.txt').read_text()
-html = pathlib.Path('/tmp/market_report.html').read_text()
-date = datetime.utcnow().strftime('%Y-%m-%d')
-send_email(f'Daily Market Report — {date}', report, html)
-send_telegram(report[:4000])
-print('Delivered.')
-"
+cd "$(dirname "$0")/../.." 2>/dev/null || cd . && python deliver.py
 ```
 
-Before running the delivery step, write your complete plain-text report to `/tmp/market_report.txt` and a styled HTML version to `/tmp/market_report.html` using the Write tool.
+If that path fails, try:
+```bash
+python /home/user/scraper/deliver.py
+```
 
-## Output
-After delivery, print a one-line confirmation:
-`Report delivered — [date] — MU: [verdict] | SNDK: [verdict]`
+---
+
+## STEP 7 — Confirm
+
+Print exactly one line:
+`✓ Report delivered — [DATE] — MU: [VERDICT] | SNDK: [VERDICT]`
